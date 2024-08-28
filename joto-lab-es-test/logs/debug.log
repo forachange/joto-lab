@@ -1,0 +1,13 @@
+[DEBUG] 2024-08-28 14:48:11.016 [main] [o.m.generator.logging.LogFactory.setImplementation:105] Logging initialized using 'org.mybatis.generator.logging.slf4j.Slf4jLoggingLogFactory@24b6b8f6' adapter.
+[DEBUG] 2024-08-28 14:48:11.022 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:505] Retrieving column information for table "student_info"
+[DEBUG] 2024-08-28 14:48:11.151 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "id", data type 12, in table "datacap..student_info"
+[DEBUG] 2024-08-28 14:48:11.152 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "name", data type 12, in table "datacap..student_info"
+[DEBUG] 2024-08-28 14:48:11.152 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "gender", data type 1, in table "datacap..student_info"
+[DEBUG] 2024-08-28 14:48:11.153 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "birthday", data type 93, in table "datacap..student_info"
+[DEBUG] 2024-08-28 14:48:11.153 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "address", data type 12, in table "datacap..student_info"
+[DEBUG] 2024-08-28 14:48:11.206 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:505] Retrieving column information for table "teacher_info"
+[DEBUG] 2024-08-28 14:48:11.245 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "id", data type 12, in table "datacap..teacher_info"
+[DEBUG] 2024-08-28 14:48:11.246 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "name", data type 12, in table "datacap..teacher_info"
+[DEBUG] 2024-08-28 14:48:11.246 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "gender", data type 1, in table "datacap..teacher_info"
+[DEBUG] 2024-08-28 14:48:11.247 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "birthday", data type 93, in table "datacap..teacher_info"
+[DEBUG] 2024-08-28 14:48:11.247 [main] [o.m.g.i.db.DatabaseIntrospector.getColumns:562] Found column "address", data type 12, in table "datacap..teacher_info"

@@ -1,0 +1,22 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:23306/datacap?useSSL=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+
+elasticsearch:
+    enable: false
+    username: ENCC(jD/cCVuH+yztsDJkGw8Egg==)
+    password: ENCC(DjbBVBSNS3hZDyDEA777Rg==)
+    hosts: 192.168.1.101:19500,192.168.1.102:19500,192.168.1.103:19500
+    scheme: https
+    caFile: dev-ca.pem
+    secret: ENCC(IjJnEnaFiftJ2VzW)
+    iv: ENCC(pfaaKEqH567XBBHq)
+
+print:
+    project:
+        enable: true
+    es:
+        enable: false

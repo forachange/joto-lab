@@ -1,0 +1,1 @@
+使用 MyBatis Generator，生成 es 实体类、简单的服务类、mappings
