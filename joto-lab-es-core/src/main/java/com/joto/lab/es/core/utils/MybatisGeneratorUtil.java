@@ -10,6 +10,7 @@ import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
 import com.joto.lab.es.core.annotations.EsField;
 import com.joto.lab.es.core.annotations.EsIndex;
 import com.joto.lab.es.core.config.MyBatisGeneratorConfig;
+import com.joto.lab.es.core.plugins.EsDtoPlugin;
 import com.joto.lab.es.core.plugins.EsMybatisPlugin;
 import com.joto.lab.es.core.plugins.EsServicePlugin;
 import org.mybatis.generator.api.MyBatisGenerator;
@@ -70,6 +71,12 @@ public class MybatisGeneratorUtil {
         servicePlugin.addProperty("targetPackage", config.getServiceTargetPackage());
         servicePlugin.addProperty("targetProject", config.getTargetProject());
         context.addPluginConfiguration(servicePlugin);
+
+        final PluginConfiguration dtoPlugin = new PluginConfiguration();
+        dtoPlugin.setConfigurationType(EsDtoPlugin.class.getName());
+        dtoPlugin.addProperty("targetPackage", config.getDtoTargetPackage());
+        dtoPlugin.addProperty("targetProject", config.getTargetProject());
+        context.addPluginConfiguration(dtoPlugin);
 
         final CommentGeneratorConfiguration commentGeneratorConfiguration = new CommentGeneratorConfiguration();
         commentGeneratorConfiguration.addProperty("suppressAllComments", "true");

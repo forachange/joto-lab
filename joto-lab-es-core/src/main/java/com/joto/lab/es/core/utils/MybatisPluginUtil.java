@@ -50,7 +50,7 @@ public class MybatisPluginUtil {
     private static final String IMPORT_JSON_FORMAT = "com.fasterxml.jackson.annotation.JsonFormat";
 
     private static final String BIG_DECIMAL_STR = "java.math.BigDecimal";
-    private static final String LOCAL_DATE_TIME_STR = "java.time.LocalDateTIme";
+    private static final String LOCAL_DATE_TIME_STR = "java.time.LocalDateTime";
 
     static {
 
@@ -183,9 +183,9 @@ public class MybatisPluginUtil {
         }
     }
 
-    public static void localDateTimeForamtter(Field field, TopLevelClass clazz) {
+    public static void localDateTimeFormatter(Field field, TopLevelClass clazz) {
         if (MybatisPluginUtil.getEsFieldType(field.getType().toString()) == EsFieldType.DATE) {
-            field.addAnnotation("@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = \"yyyy-MM-dd\", timezone = \"GMT+8\"");
+            field.addAnnotation("@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = \"yyyy-MM-dd\", timezone = \"GMT+8\")");
             clazz.addImportedType(IMPORT_JSON_FORMAT);
         }
     }

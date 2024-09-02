@@ -1,8 +1,8 @@
 package com.joto.lab.es.core.plugins;
 
-import cn.hutool.core.date.DateTime;
 import com.joto.lab.es.core.annotations.EsField;
 import com.joto.lab.es.core.dto.Paging;
+import com.joto.lab.es.core.dto.Pit;
 import com.joto.lab.es.core.utils.MybatisPluginUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.generator.api.GeneratedJavaFile;
@@ -66,7 +66,7 @@ public class EsDtoPlugin extends PluginAdapter {
         clazz.addImportedType("lombok.EqualsAndHashCode");
 
         clazz.addAnnotation("@Data");
-        clazz.addAnnotation("@EqualsAndHashCode(callSuper = true");
+        clazz.addAnnotation("@EqualsAndHashCode(callSuper = true)");
 
         introspectedTable.getAllColumns().forEach( column -> {
             Field field = new Field();
@@ -77,7 +77,7 @@ public class EsDtoPlugin extends PluginAdapter {
             field.setType(column.getFullyQualifiedJavaType());
 
             MybatisPluginUtil.setFieldEsAnnotation(field, column, clazz);
-            MybatisPluginUtil.localDateTimeForamtter(field, clazz);
+            MybatisPluginUtil.localDateTimeFormatter(field, clazz);
 
             clazz.addField(field);
         });
@@ -100,14 +100,14 @@ public class EsDtoPlugin extends PluginAdapter {
 
         clazz.setSuperClass(absBaseService);
 
-        clazz.addImportedType(Paging.class.getName());
+        clazz.addImportedType(Pit.class.getName());
         clazz.addImportedType(EsField.class.getName());
         clazz.addImportedType("com.joto.lab.es.core.enmus.*");
         clazz.addImportedType("lombok.Data");
         clazz.addImportedType("lombok.EqualsAndHashCode");
 
         clazz.addAnnotation("@Data");
-        clazz.addAnnotation("@EqualsAndHashCode(callSuper = true");
+        clazz.addAnnotation("@EqualsAndHashCode(callSuper = true)");
 
         introspectedTable.getAllColumns().forEach( column -> {
             Field field = new Field();
@@ -118,7 +118,7 @@ public class EsDtoPlugin extends PluginAdapter {
             field.setType(column.getFullyQualifiedJavaType());
 
             MybatisPluginUtil.setFieldEsAnnotation(field, column, clazz);
-            MybatisPluginUtil.localDateTimeForamtter(field, clazz);
+            MybatisPluginUtil.localDateTimeFormatter(field, clazz);
 
             clazz.addField(field);
         });
