@@ -2,7 +2,7 @@ package com.joto.lab.es.core.handler;
 
 import co.elastic.clients.elasticsearch._types.mapping.Property;
 import com.joto.lab.es.core.annotations.EsField;
-import com.joto.lab.es.core.utils.EsTypeUtil;
+import com.joto.lab.es.core.utils.MybatisPluginUtil;
 
 /**
  * @author joey
@@ -15,7 +15,7 @@ public class KeywordHandler implements IEsPropertyHandler{
             if (esField.ignoreAbove() > 0) {
                 builder.ignoreAbove(esField.ignoreAbove());
             }
-            EsTypeUtil.docValues(builder, esField);
+            MybatisPluginUtil.docValues(builder, esField);
             if (!esField.index()) {
                 builder.index(false);
             }

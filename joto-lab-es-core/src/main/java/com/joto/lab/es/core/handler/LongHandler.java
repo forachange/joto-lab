@@ -2,7 +2,7 @@ package com.joto.lab.es.core.handler;
 
 import co.elastic.clients.elasticsearch._types.mapping.Property;
 import com.joto.lab.es.core.annotations.EsField;
-import com.joto.lab.es.core.utils.EsTypeUtil;
+import com.joto.lab.es.core.utils.MybatisPluginUtil;
 
 
 /**
@@ -14,9 +14,9 @@ public class LongHandler implements IEsPropertyHandler{
     @Override
     public Property build(EsField esField) {
         return Property.of(pBuilder -> pBuilder.long_(builder -> {
-            EsTypeUtil.docValues(builder, esField);
-            EsTypeUtil.index(builder, esField);
-            EsTypeUtil.store(builder, esField);
+            MybatisPluginUtil.docValues(builder, esField);
+            MybatisPluginUtil.index(builder, esField);
+            MybatisPluginUtil.store(builder, esField);
 
             return builder;
         }));

@@ -34,6 +34,11 @@ public class MyBatisGeneratorConfig {
     private String serviceTargetPackage;
 
     /**
+     * target dto package
+     */
+    private String dtoTargetPackage;
+
+    /**
      * target project path
      */
     private String targetProject;

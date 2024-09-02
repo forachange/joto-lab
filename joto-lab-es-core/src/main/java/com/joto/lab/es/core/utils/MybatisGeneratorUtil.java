@@ -1,6 +1,5 @@
 package com.joto.lab.es.core.utils;
 
-import cn.hutool.core.compiler.CompilerUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ClassLoaderUtil;
 import cn.hutool.core.util.ReflectUtil;
@@ -149,13 +148,13 @@ public class MybatisGeneratorUtil {
                 return;
             }
 
-            final Property property = EsTypeUtil.build(annotation);
+            final Property property = MybatisPluginUtil.build(annotation);
             builder.properties(key, property);
         });
 
         final TypeMapping typeMapping = builder.build();
 
-        return EsTypeUtil.typeMapping2PrettyJsonStr(typeMapping);
+        return MybatisPluginUtil.typeMapping2PrettyJsonStr(typeMapping);
     }
 
     /**

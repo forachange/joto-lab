@@ -6,7 +6,7 @@ import com.joto.lab.es.core.annotations.EsField;
 import com.joto.lab.es.core.annotations.EsIndex;
 import com.joto.lab.es.core.dto.EsId;
 import com.joto.lab.es.core.enmus.EsFieldType;
-import com.joto.lab.es.core.utils.EsTypeUtil;
+import com.joto.lab.es.core.utils.MybatisPluginUtil;
 import com.joto.lab.es.core.enmus.EsAnalyzer;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -27,47 +27,11 @@ public class EsMybatisPlugin extends PluginAdapter {
 
     private static final String TPL_ES_INDEX = "@EsIndex(name = \"{}\")";
 
-    private static final String TPL_ES_FIELD = "@EsField(fieldName = \"{}\", fieldType = EsFieldType.{})";
-
-    private static final String TPL_KEYWORD_FIELD = "@EsField(fieldName = \"{}\", fieldType = EsFieldType.KEYWORD, ignoreAbove = 128)";
-
-    private static final String TPL_TEXT_FIELD = "@EsField(fieldName = \"{}\", fieldType = EsFieldType.TEXT, analyzer = EsAnalyzer.IK_MAX, searchAnalyzer = EsAnalyzer.IK_SMART)";
-
-
-    private static final String IMPORT_SERIALIZER = "com.joto.lab.es.core.serializer.*";
-    private static final String IMPORT_JACKSON = "com.fasterxml.jackson.databind.annotation.*";
-
     @Override
     public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, ModelClassType modelClassType) {
 
-        final EsFieldType esFieldType = EsTypeUtil.getEsFieldType(field.getType().toString());
-
-        if (esFieldType == EsFieldType.KEYWORD) {
-            if (introspectedColumn.getLength() > 128) {
-                field.addAnnotation(StrUtil.format(TPL_TEXT_FIELD, field.getName()));
-            } else {
-                field.addAnnotation(StrUtil.format(TPL_KEYWORD_FIELD, field.getName()));
-            }
-        } else {
-            field.addAnnotation(StrUtil.format(TPL_ES_FIELD, field.getName(), esFieldType));
-        }
-
-        if (esFieldType == EsFieldType.DATE) {
-            field.addAnnotation("@JsonSerialize(using = LocalDateTimeSerializer.class)");
-            field.addAnnotation("@JsonDeserialize(using = ZoneDateTimeDeserializer.class)");
-
-            topLevelClass.addImportedType(IMPORT_SERIALIZER);
-            topLevelClass.addImportedType(IMPORT_JACKSON);
-        }
-
-        String remarks = introspectedColumn.getRemarks();
-        if (StrUtil.isBlank(remarks)) {
-            remarks = field.getName();
-        }
-
-        field.addJavaDocLine("/**");
-        field.addJavaDocLine(" * " + remarks);
-        field.addJavaDocLine(" */");
+        MybatisPluginUtil.setFieldEsAnnotation(field, introspectedColumn, topLevelClass);
+        MybatisPluginUtil.localDateTimeSerialize(field, topLevelClass);
 
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
@@ -110,16 +74,14 @@ public class EsMybatisPlugin extends PluginAdapter {
             remarks = "EsMybatisPlugin Generated";
         }
 
-        topLevelClass.addJavaDocLine("/**");
-        topLevelClass.addJavaDocLine(" * " + remarks);
-        topLevelClass.addJavaDocLine(" * @author " + introspectedTable.getContext().getCommentGeneratorConfiguration().getProperty("author"));
-        topLevelClass.addJavaDocLine(" * @date " + DateTime.now());
-        topLevelClass.addJavaDocLine(" */");
+        MybatisPluginUtil.addClassJavaDoc(topLevelClass, introspectedTable, remarks);
 
         topLevelClass.addSuperInterface(interfaceEsId);
 
         return super.modelBaseRecordClassGenerated(topLevelClass, introspectedTable);
     }
+
+
 
 }
 

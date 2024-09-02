@@ -2,6 +2,7 @@ package com.joto.lab.es.core.plugins;
 
 import cn.hutool.core.date.DateTime;
 import com.joto.lab.es.core.service.AbsBaseService;
+import com.joto.lab.es.core.utils.MybatisPluginUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -38,9 +39,6 @@ public class EsServicePlugin extends PluginAdapter {
     @Override
     public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
 
-        final String recordType = introspectedTable.getBaseRecordType();
-        final String resultMapId = introspectedTable.getBaseResultMapId();
-
         final String objectName = introspectedTable.getTableConfiguration().getDomainObjectName();
 
         serviceName = objectName + "ServiceImpl";
@@ -63,12 +61,8 @@ public class EsServicePlugin extends PluginAdapter {
         // 描述类的作用域修饰符
         clazz.setVisibility(JavaVisibility.PUBLIC);
 
-        String remarks = introspectedTable.getRemarks();
-        clazz.addJavaDocLine("/**");
-        clazz.addJavaDocLine(" * " + remarks + " Service");
-        clazz.addJavaDocLine(" * @author " + introspectedTable.getContext().getCommentGeneratorConfiguration().getProperty("author"));
-        clazz.addJavaDocLine(" * @date " + DateTime.now());
-        clazz.addJavaDocLine(" */");
+        MybatisPluginUtil.addClassJavaDoc(clazz, introspectedTable,
+            introspectedTable.getRemarks() + " Service");
 
         clazz.addImportedType(introspectedTable.getBaseRecordType());
         clazz.addImportedType(ABS_BASE_SERVICE);

@@ -26,9 +26,10 @@ public class GenerateClassTest {
         config.setAuthor("joey");
         config.setTables("student_info;teacher_info");
         config.setDomains("StudentInfo;TeacherInfo");
-        config.setEntityTargetPackage("com.joto.entity");
-        config.setServiceTargetPackage("com.joto.service");
-        config.setTargetProject("/Users/joey/Workspace/tmp");
+        config.setEntityTargetPackage("com.joto.lab.es.test.entity");
+        config.setServiceTargetPackage("com.joto.lab.es.test.service");
+        config.setDtoTargetPackage("com.joto.lab.es.test.dto");
+        config.setTargetProject("/Users/joey/Workspace/mbc");
 
         MybatisGeneratorUtil.generateClassAndMapping(config);
     }

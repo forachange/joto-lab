@@ -1,5 +1,7 @@
 package com.joto.lab.es.core.utils;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import co.elastic.clients.elasticsearch._types.mapping.DocValuesPropertyBase;
 import co.elastic.clients.elasticsearch._types.mapping.NumberPropertyBase;
@@ -14,6 +16,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.joto.lab.es.core.annotations.EsField;
 import com.joto.lab.es.core.enmus.EsFieldType;
 import com.joto.lab.es.core.handler.*;
+import org.mybatis.generator.api.IntrospectedColumn;
+import org.mybatis.generator.api.IntrospectedTable;
+import org.mybatis.generator.api.dom.java.Field;
+import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -28,9 +34,23 @@ import java.util.Map;
  * @author joey
  * @date 2024/8/14 16:05
  */
-public class EsTypeUtil {
+public class MybatisPluginUtil {
     private static final Map<String, EsFieldType> TYPE_MAP = new HashMap<>();
     private static final Map<EsFieldType, IEsPropertyHandler> TYPE_PROPERTY_MAP = new HashMap<>();
+
+
+    private static final String TPL_ES_FIELD = "@EsField(fieldName = \"{}\", fieldType = EsFieldType.{})";
+
+    private static final String TPL_KEYWORD_FIELD = "@EsField(fieldName = \"{}\", fieldType = EsFieldType.KEYWORD, ignoreAbove = 128)";
+
+    private static final String TPL_TEXT_FIELD = "@EsField(fieldName = \"{}\", fieldType = EsFieldType.TEXT, analyzer = EsAnalyzer.IK_MAX, searchAnalyzer = EsAnalyzer.IK_SMART)";
+
+    private static final String IMPORT_SERIALIZER = "com.joto.lab.es.core.serializer.*";
+    private static final String IMPORT_JACKSON = "com.fasterxml.jackson.databind.annotation.*";
+    private static final String IMPORT_JSON_FORMAT = "com.fasterxml.jackson.annotation.JsonFormat";
+
+    private static final String BIG_DECIMAL_STR = "java.math.BigDecimal";
+    private static final String LOCAL_DATE_TIME_STR = "java.time.LocalDateTIme";
 
     static {
 
@@ -57,7 +77,7 @@ public class EsTypeUtil {
         TYPE_PROPERTY_MAP.put(EsFieldType.DATE, new DateHandler());
     }
 
-    private EsTypeUtil() {
+    private MybatisPluginUtil() {
     }
 
     /**
@@ -117,5 +137,64 @@ public class EsTypeUtil {
     public static String typeMapping2PrettyJsonStr(TypeMapping typeMapping) {
         String json = typeMapping2String(typeMapping);
         return JSONUtil.formatJsonStr(json);
+    }
+
+    public static void setFieldEsAnnotation(Field field, IntrospectedColumn column, TopLevelClass clazz) {
+        final EsFieldType esFieldType = MybatisPluginUtil.getEsFieldType(field.getType().toString());
+
+        if (esFieldType == EsFieldType.KEYWORD) {
+            if (column.getLength() > 128) {
+                field.addAnnotation(StrUtil.format(TPL_TEXT_FIELD, field.getName()));
+            } else {
+                field.addAnnotation(StrUtil.format(TPL_KEYWORD_FIELD, field.getName()));
+            }
+        } else {
+            field.addAnnotation(StrUtil.format(TPL_ES_FIELD, field.getName(), esFieldType));
+        }
+
+        switch (column.getFullyQualifiedJavaType().getFullyQualifiedName()) {
+            case BIG_DECIMAL_STR:
+                clazz.addImportedType(BigDecimal.class.getName());
+                break;
+            case LOCAL_DATE_TIME_STR:
+                clazz.addImportedType(LocalDateTime.class.getName());
+                break;
+            default:
+                break;
+        }
+
+        String remarks = column.getRemarks();
+        if (StrUtil.isBlank(remarks)) {
+            remarks = field.getName();
+        }
+
+        field.addJavaDocLine("/**");
+        field.addJavaDocLine(" * " + remarks);
+        field.addJavaDocLine(" */");
+    }
+
+    public static void localDateTimeSerialize(Field field, TopLevelClass clazz) {
+        if (MybatisPluginUtil.getEsFieldType(field.getType().toString()) == EsFieldType.DATE) {
+            field.addAnnotation("@JsonSerialize(using = LocalDateTimeSerializer.class)");
+            field.addAnnotation("@JsonDeserialize(using = ZoneDateTimeDeserializer.class)");
+
+            clazz.addImportedType(IMPORT_SERIALIZER);
+            clazz.addImportedType(IMPORT_JACKSON);
+        }
+    }
+
+    public static void localDateTimeForamtter(Field field, TopLevelClass clazz) {
+        if (MybatisPluginUtil.getEsFieldType(field.getType().toString()) == EsFieldType.DATE) {
+            field.addAnnotation("@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = \"yyyy-MM-dd\", timezone = \"GMT+8\"");
+            clazz.addImportedType(IMPORT_JSON_FORMAT);
+        }
+    }
+
+    public static void addClassJavaDoc(TopLevelClass topLevelClass, IntrospectedTable introspectedTable, String remarks) {
+        topLevelClass.addJavaDocLine("/**");
+        topLevelClass.addJavaDocLine(" * " + remarks);
+        topLevelClass.addJavaDocLine(" * @author " + introspectedTable.getContext().getCommentGeneratorConfiguration().getProperty("author"));
+        topLevelClass.addJavaDocLine(" * @date " + DateTime.now());
+        topLevelClass.addJavaDocLine(" */");
     }
 }

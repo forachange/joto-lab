@@ -1,8 +1,0 @@
-[INFO ] 2024-08-28 14:41:12.076 [main] [com.joto.lab.es.test.CryptoTest.encryptEs:24] user: ez32pqSixCu9AyOgBf0d5A==
-[INFO ] 2024-08-28 14:41:12.098 [main] [com.joto.lab.es.test.CryptoTest.encryptEs:25] pwd: ez32pqSixCu9AyOgBf0d5A==
-[INFO ] 2024-08-28 14:41:12.098 [main] [com.joto.lab.es.test.CryptoTest.encryptEs:26] secret: yAFLS0Le80FAf8Wm
-[INFO ] 2024-08-28 14:41:12.098 [main] [com.joto.lab.es.test.CryptoTest.encryptEs:27] iv: 1xnP6PjMawPO776u
-[INFO ] 2024-08-28 14:41:49.032 [main] [com.joto.lab.es.test.CryptoTest.encryptEs:24] user: jD/cCVuH+yztsDJkGw8Egg==
-[INFO ] 2024-08-28 14:41:49.054 [main] [com.joto.lab.es.test.CryptoTest.encryptEs:25] pwd: DjbBVBSNS3hZDyDEA777Rg==
-[INFO ] 2024-08-28 14:41:49.054 [main] [com.joto.lab.es.test.CryptoTest.encryptEs:26] secret: IjJnEnaFiftJ2VzW
-[INFO ] 2024-08-28 14:41:49.054 [main] [com.joto.lab.es.test.CryptoTest.encryptEs:27] iv: pfaaKEqH567XBBHq
